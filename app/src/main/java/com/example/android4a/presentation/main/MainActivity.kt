@@ -1,12 +1,11 @@
 package com.example.android4a.presentation.main
 
+import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
+import com.example.android4a.Constants
 import com.example.android4a.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_main.*
@@ -23,42 +22,44 @@ class MainActivity : AppCompatActivity() {
             when (it) {
                 is LoginSuccess -> {
                     MaterialAlertDialogBuilder(this)
-                        .setTitle("Succès")
-                        .setMessage("Compte reconnu")
-                        .setPositiveButton("OK") { dialog, which ->
+                        .setTitle(Constants.SUCCESS_MSG)
+                        .setMessage(Constants.VALID_ACCOUNT)
+                        .setPositiveButton(Constants.ITS_OK) { dialog, which ->
                             dialog.dismiss()
+                            val myIntent = Intent(this@MainActivity, ApplicationActivity::class.java)
+                            startActivity(myIntent)
                         }
                         .show()
                 }
                 LoginError ->
                     MaterialAlertDialogBuilder(this)
-                        .setTitle("Erreur")
-                        .setMessage("Compte inconnu")
-                        .setPositiveButton("OK") { dialog, which ->
+                        .setTitle(Constants.ERROR_MSG)
+                        .setMessage(Constants.INVALID_ACCOUNT)
+                        .setPositiveButton(Constants.ITS_OK) { dialog, which ->
                             dialog.dismiss()
                         }
                         .show()
                 PassError ->
                     MaterialAlertDialogBuilder(this)
-                        .setTitle("Erreur")
-                        .setMessage("Mot de passe inconnu")
-                        .setPositiveButton("OK") { dialog, which ->
+                        .setTitle(Constants.ERROR_MSG)
+                        .setMessage(Constants.INVALID_PASS)
+                        .setPositiveButton(Constants.ITS_OK) { dialog, which ->
                             dialog.dismiss()
                         }
                         .show()
                 LoginCreate ->
                     MaterialAlertDialogBuilder(this)
-                        .setTitle("Succès")
-                        .setMessage("Votre compte a bien été crée")
-                        .setPositiveButton("OK") { dialog, which ->
+                        .setTitle(Constants.SUCCESS_MSG)
+                        .setMessage(Constants.ACCOUNT_CREATE)
+                        .setPositiveButton(Constants.ITS_OK) { dialog, which ->
                             dialog.dismiss()
                         }
                         .show()
                 LoginExist ->
                     MaterialAlertDialogBuilder(this)
-                        .setTitle("Erreur")
-                        .setMessage("Ce Login est déjà utilisé")
-                        .setPositiveButton("OK") { dialog, which ->
+                        .setTitle(Constants.ERROR_MSG)
+                        .setMessage(Constants.LOGIN_TAKEN)
+                        .setPositiveButton(Constants.ITS_OK) { dialog, which ->
                             dialog.dismiss()
                         }
                         .show()
