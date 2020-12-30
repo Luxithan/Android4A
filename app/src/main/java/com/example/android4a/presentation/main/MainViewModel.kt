@@ -9,6 +9,7 @@ import com.example.android4a.domain.usecase.GetUserUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.log
 
 class MainViewModel(
     private val createUserUseCase: CreateUserUseCase,
@@ -19,18 +20,40 @@ class MainViewModel(
 
     fun onClickedLogin(emailUser: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val user: User? = getUserUseCase.invoke(emailUser) //A COMPLETER AVEC LE PASSWORD (emailUser, password)
-            val loginStatus: LoginStatus = if(user != null){
-                LoginSuccess(user.email)
+            val user: User? = getUserUseCase.invoke(emailUser)
+            var userPass: User? = null
+            if(user != null){
+                userPass = getUserUseCase.invoke(emailUser, password)
+            }
+            val loginStatus: LoginStatus = if(userPass != null){
+                LoginSuccess(userPass.email,userPass.password)
             }else{
-                LoginError
+                if (user != null){
+                    PassError
+                }else{
+                    LoginError
+                }
             }
             withContext(Dispatchers.Main){
                 loginLiveData.value = loginStatus
             }
-//            createUserUseCase.invoke(User("test"))
-//            val user: User = getUserUseCase.invoke("test")
-//            val debug = "debug"
+        }
+    }
+
+    fun onClickedCreate(emailUser: String, password: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val user: User? = getUserUseCase.invoke(emailUser)
+            val loginStatus: LoginStatus = if(user != null){
+                LoginExist
+            }else{
+                LoginCreate
+            }
+            if(loginStatus == LoginCreate){
+                createUserUseCase.invoke(User(emailUser, password))
+            }
+            withContext(Dispatchers.Main){
+                loginLiveData.value = loginStatus
+            }
         }
     }
 }

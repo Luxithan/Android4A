@@ -17,27 +17,56 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.loginLiveData.observe(this, Observer {
             when(it){
                 is LoginSuccess -> {
-                    //TODO Navigation
-                }
-                LoginError ->
                     MaterialAlertDialogBuilder(this)
-                        .setTitle("Erreur")
-                        .setMessage("Compte inconnue")
+                        .setTitle("Succès")
+                        .setMessage("Compte reconnu")
                         .setPositiveButton("OK"){ dialog, which ->
                             dialog.dismiss()
                         }
                         .show()
-
+                }
+                LoginError ->
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle("Erreur")
+                        .setMessage("Compte inconnu")
+                        .setPositiveButton("OK"){ dialog, which ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                PassError ->
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle("Erreur")
+                        .setMessage("Mot de passe inconnu")
+                        .setPositiveButton("OK"){ dialog, which ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                LoginCreate ->
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle("Succès")
+                        .setMessage("Votre compte a bien été crée")
+                        .setPositiveButton("OK"){ dialog, which ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                LoginExist ->
+                    MaterialAlertDialogBuilder(this)
+                        .setTitle("Erreur")
+                        .setMessage("Ce Login est déjà utilisé")
+                        .setPositiveButton("OK"){ dialog, which ->
+                            dialog.dismiss()
+                        }
+                        .show()
             }
         })
+
         login_button.setOnClickListener(){
             mainViewModel.onClickedLogin(login_edit.text.toString().trim(), password_edit.text.toString())
         }
 
-/*        mainViewModel.counter.observe(this, Observer {
-            value -> main_text.text = value.toString()
-        })
+        create_account_button.setOnClickListener(){
+            mainViewModel.onClickedCreate(login_edit.text.toString().trim(), password_edit.text.toString())
+        }
 
- */
     }
 }
